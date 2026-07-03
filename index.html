@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pharmacie Resurrection — Enquête de satisfaction</title>
+<meta name="description" content="Donnez votre avis sur la Pharmacie Resurrection (Taabo) en moins de 5 minutes.">
+
+<!-- Polices : Manrope (titres) + Inter (texte courant) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* =====================================================================
+   PHARMACIE RESURRECTION — FEUILLE DE STYLE
+   Palette santé bleu / vert. Signature visuelle : barre de progression
+   en forme de "gélule" segmentée qui se remplit du bleu vers le vert.
+   ===================================================================== */
+
+:root{
+  /* --- Couleurs --- */
+  --blue-deep:   #0B5D6B;   /* bleu-pétrole principal */
+  --blue-mid:    #1584A3;   /* bleu plus clair, accents */
+  --green:       #2E9E6D;   /* vert santé */
+  --green-light: #CDEFDF;   /* vert pastel, fonds légers */
+  --mint-bg:     #F2FAF8;   /* fond général */
+  --card-bg:     #FFFFFF;
+  --ink:         #102B30;   /* texte principal */
+  --ink-soft:    #52706F;   /* texte secondaire */
+  --amber:       #F2A93B;   /* accent notation haute */
+  --line:        #DCEEEA;   /* bordures légères */
+  --danger:      #D9534F;
+
+  /* --- Typo --- */
+  --font-display: 'Manrope', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+
+  /* --- Forme --- */
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 12px 30px -14px rgba(11,93,107,0.28);
+}
+
+*{ box-sizing:border-box; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--mint-bg);
+  color:var(--ink);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* =====================================================================
+   FOND DÉCORATIF
+   ===================================================================== */
+.bg-decor{
+  position:fixed; inset:0; overflow:hidden; z-index:0; pointer-events:none;
+}
+.capsule{
+  position:absolute;
+  width:120px; height:46px;
+  border-radius:var(--radius-pill);
+  opacity:0.10;
+  background:linear-gradient(90deg, var(--blue-mid) 50%, var(--green) 50%);
+  transform:rotate(-35deg);
+}
+.c1{ top:8%; left:-40px; width:180px; height:64px; }
+.c2{ bottom:12%; right:-50px; width:220px; height:78px; transform:rotate(28deg); }
+.c3{ top:52%; left:78%; width:110px; height:40px; transform:rotate(-15deg); opacity:0.07; }
+.cross{
+  position:absolute; top:70%; left:6%;
+  width:60px; height:60px; opacity:0.06;
+}
+.cross.c4::before,.cross.c4::after{
+  content:''; position:absolute; background:var(--blue-deep); border-radius:6px;
+}
+.cross.c4::before{ width:60px; height:16px; top:22px; }
+.cross.c4::after{ width:16px; height:60px; left:22px; }
+
+/* =====================================================================
+   MISE EN PAGE GÉNÉRALE
+   ===================================================================== */
+.page{
+  position:relative; z-index:1;
+  max-width:640px;
+  margin:0 auto;
+  padding:24px 20px 40px;
+  min-height:100vh;
+  display:flex; flex-direction:column;
+}
+
+/* --- En-tête --- */
+.site-header{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  margin-bottom:22px; flex-wrap:wrap;
+}
+.brand{ display:flex; align-items:center; gap:12px; }
+.brand-mark{
+  width:52px; height:52px; border-radius:16px;
+  background:linear-gradient(135deg, var(--blue-deep), var(--blue-mid));
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 8px 18px -8px rgba(11,93,107,0.55);
+  flex-shrink:0;
+}
+.brand-eyebrow{
+  margin:0; font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--green); font-weight:700;
+}
+.brand-text h1{
+  margin:2px 0 0; font-family:var(--font-display); font-size:22px; font-weight:800;
+  color:var(--blue-deep); letter-spacing:-0.01em;
+}
+.brand-text h1 span{ color:var(--ink-soft); font-weight:600; font-size:16px; }
+.brand-claim{
+  margin:0; font-size:13px; font-style:italic; color:var(--ink-soft);
+}
+
+/* --- Barre de progression "gélule" --- */
+.progress-wrap{ margin-bottom:22px; }
+.progress-track{
+  position:relative;
+  height:16px;
+  border-radius:var(--radius-pill);
+  background:var(--card-bg);
+  border:2px solid var(--line);
+  overflow:hidden;
+  box-shadow:inset 0 2px 4px rgba(16,43,48,0.06);
+}
+.progress-fill{
+  height:100%;
+  width:0%;
+  border-radius:var(--radius-pill);
+  background:linear-gradient(90deg, var(--blue-deep), var(--blue-mid) 55%, var(--green));
+  transition:width 0.45s cubic-bezier(.4,0,.2,1);
+}
+.progress-label{
+  margin:8px 2px 0; font-size:12.5px; color:var(--ink-soft); font-weight:600;
+}
+.progress-label #stepName{ color:var(--blue-deep); }
+
+/* =====================================================================
+   CARTES / ÉTAPES
+   ===================================================================== */
+main{ flex:1; }
+.step{ display:none; }
+.step.active{
+  display:block;
+  animation:stepIn 0.38s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes stepIn{
+  from{ opacity:0; transform:translateY(14px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+
+.card{
+  background:var(--card-bg);
+  border-radius:var(--radius-lg);
+  padding:26px 22px 28px;
+  box-shadow:var(--shadow-card);
+  border:1px solid var(--line);
+}
+
+.eyebrow{
+  margin:0 0 6px; font-size:12px; font-weight:700; letter-spacing:0.09em;
+  text-transform:uppercase; color:var(--green);
+}
+h2{
+  margin:0 0 14px; font-family:var(--font-display); font-size:21px; font-weight:800;
+  color:var(--blue-deep); letter-spacing:-0.01em; line-height:1.25;
+}
+.hint{ margin:-6px 0 16px; font-size:13.5px; color:var(--ink-soft); }
+
+/* --- Carte d'accueil / remerciements --- */
+.intro-card{ text-align:left; }
+.intro-text{ font-size:15px; line-height:1.6; color:var(--ink-soft); margin:0 0 16px; }
+.intro-text.small{ font-size:14px; margin-top:-6px; }
+.intro-points{ list-style:none; margin:0 0 22px; padding:0; display:flex; flex-direction:column; gap:8px; }
+.intro-points li{ display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600; color:var(--ink); }
+.dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+.dot-blue{ background:var(--blue-mid); }
+.dot-green{ background:var(--green); }
+
+.thanks-card{ text-align:center; }
+.thanks-icon{
+  width:66px; height:66px; margin:0 auto 16px; border-radius:50%;
+  background:linear-gradient(135deg, var(--green), var(--blue-mid));
+  display:flex; align-items:center; justify-content:center;
+  animation:pop 0.5s cubic-bezier(.3,1.5,.4,1);
+}
+@keyframes pop{ from{ transform:scale(0.4); opacity:0; } to{ transform:scale(1); opacity:1; } }
+.thanks-card h2{ text-align:center; }
+.thanks-card .intro-text{ text-align:center; }
+
+/* =====================================================================
+   CHAMPS : fieldset / légendes
+   ===================================================================== */
+.field-group{ border:none; margin:0 0 22px; padding:0; }
+.field-group:last-child{ margin-bottom:4px; }
+.field-group legend{
+  font-weight:700; font-size:14.5px; color:var(--ink); margin-bottom:10px; padding:0;
+}
+.field-label{
+  display:block; font-weight:700; font-size:14.5px; color:var(--ink); margin:0 0 8px;
+}
+
+/* --- Options en "chips" (radio) --- */
+.chip-options{ display:flex; flex-wrap:wrap; gap:9px; }
+.chip{ position:relative; }
+.chip input{ position:absolute; opacity:0; width:100%; height:100%; cursor:pointer; margin:0; }
+.chip span{
+  display:inline-flex; align-items:center; padding:10px 16px;
+  border-radius:var(--radius-pill); border:1.5px solid var(--line);
+  background:var(--mint-bg); font-size:13.5px; font-weight:600; color:var(--ink-soft);
+  transition:all 0.18s ease; cursor:pointer; user-select:none;
+}
+.chip input:checked + span{
+  background:linear-gradient(90deg, var(--blue-deep), var(--blue-mid));
+  border-color:var(--blue-deep); color:#fff;
+  box-shadow:0 6px 14px -6px rgba(11,93,107,0.5);
+}
+.chip input:focus-visible + span{ outline:3px solid var(--amber); outline-offset:2px; }
+.chip span:hover{ border-color:var(--blue-mid); }
+
+/* --- Échelle 1-5 pour les prestations --- */
+.scale-legend{
+  display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft);
+  margin-bottom:10px; padding:0 2px;
+}
+.rating-list{ display:flex; flex-direction:column; gap:16px; }
+.rating-item{
+  padding-bottom:14px; border-bottom:1px solid var(--line);
+}
+.rating-item:last-child{ border-bottom:none; padding-bottom:0; }
+.rating-item p{ margin:0 0 9px; font-size:14px; font-weight:600; color:var(--ink); }
+.rating-scale{ display:flex; gap:7px; }
+.rating-scale label{ position:relative; flex:1; }
+.rating-scale input{ position:absolute; opacity:0; width:100%; height:100%; cursor:pointer; margin:0; }
+.rating-scale span{
+  display:flex; align-items:center; justify-content:center;
+  height:38px; border-radius:10px; border:1.5px solid var(--line);
+  background:var(--mint-bg); font-weight:700; font-size:13.5px; color:var(--ink-soft);
+  transition:all 0.15s ease; cursor:pointer;
+}
+.rating-scale input:checked + span{
+  background:var(--green); border-color:var(--green); color:#fff; transform:translateY(-2px);
+  box-shadow:0 6px 12px -5px rgba(46,158,109,0.55);
+}
+.rating-scale input:focus-visible + span{ outline:3px solid var(--amber); outline-offset:2px; }
+
+/* --- Grille de cases à cocher --- */
+.check-grid{ display:flex; flex-direction:column; gap:9px; }
+.check-item{ position:relative; }
+.check-item input{ position:absolute; opacity:0; width:100%; height:100%; cursor:pointer; margin:0; }
+.check-item .row{
+  display:flex; align-items:center; gap:12px; padding:12px 14px;
+  border:1.5px solid var(--line); border-radius:var(--radius-md); background:var(--mint-bg);
+  transition:all 0.15s ease; cursor:pointer;
+}
+.check-item .box{
+  width:20px; height:20px; border-radius:6px; border:2px solid var(--blue-mid); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; transition:all 0.15s ease;
+}
+.check-item .box svg{ opacity:0; transform:scale(0.5); transition:all 0.15s ease; }
+.check-item input:checked ~ .row{
+  border-color:var(--green); background:var(--green-light);
+}
+.check-item input:checked ~ .row .box{ background:var(--green); border-color:var(--green); }
+.check-item input:checked ~ .row .box svg{ opacity:1; transform:scale(1); }
+.check-item input:focus-visible ~ .row{ outline:3px solid var(--amber); outline-offset:1px; }
+.check-item .row span.label-text{ font-size:14px; font-weight:600; color:var(--ink); }
+
+.text-input, .text-area{
+  width:100%; border:1.5px solid var(--line); border-radius:var(--radius-md);
+  padding:12px 14px; font-family:var(--font-body); font-size:14.5px; color:var(--ink);
+  background:var(--mint-bg); margin:10px 0 20px; resize:vertical;
+  transition:border-color 0.15s ease;
+}
+.text-input:focus, .text-area:focus{ outline:none; border-color:var(--blue-mid); background:#fff; }
+.text-area:last-of-type{ margin-bottom:4px; }
+.hidden{ display:none !important; }
+
+/* --- Note globale 0-10 --- */
+.nps-row{ display:flex; flex-wrap:wrap; gap:8px; }
+.nps-row label{ position:relative; flex:1 1 auto; min-width:42px; }
+.nps-row input{ position:absolute; opacity:0; width:100%; height:100%; cursor:pointer; margin:0; }
+.nps-row span{
+  display:flex; align-items:center; justify-content:center; height:46px;
+  border-radius:12px; border:1.5px solid var(--line); background:var(--mint-bg);
+  font-weight:800; font-size:15px; color:var(--ink-soft); transition:all 0.15s ease; cursor:pointer;
+}
+.nps-row input:checked + span{
+  background:linear-gradient(135deg, var(--amber), #E8862F); border-color:#E8862F; color:#fff;
+  transform:translateY(-2px) scale(1.05); box-shadow:0 8px 16px -6px rgba(232,134,47,0.55);
+}
+.nps-row input:focus-visible + span{ outline:3px solid var(--blue-mid); outline-offset:2px; }
+.nps-scale-labels{
+  display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-soft); margin-top:8px;
+}
+
+.error-msg{
+  display:none; margin:14px 0 0; padding:10px 14px; border-radius:10px;
+  background:#FCEBEA; color:var(--danger); font-size:13px; font-weight:600;
+}
+.error-msg.show{ display:block; animation:shake 0.35s; }
+@keyframes shake{ 0%,100%{ transform:translateX(0); } 25%{ transform:translateX(-5px); } 75%{ transform:translateX(5px); } }
+
+/* =====================================================================
+   BOUTONS / NAVIGATION
+   ===================================================================== */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  font-family:var(--font-body); font-weight:700; font-size:14.5px;
+  border-radius:var(--radius-pill); border:none; cursor:pointer;
+  padding:13px 22px; transition:transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.btn:active{ transform:scale(0.97); }
+.btn-primary{
+  background:linear-gradient(90deg, var(--blue-deep), var(--green));
+  color:#fff; box-shadow:0 10px 20px -10px rgba(11,93,107,0.6);
+}
+.btn-primary:hover{ box-shadow:0 12px 24px -8px rgba(11,93,107,0.65); }
+.btn-primary:focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+.btn-ghost{
+  background:transparent; color:var(--ink-soft); border:1.5px solid var(--line);
+}
+.btn-ghost:hover{ border-color:var(--blue-mid); color:var(--blue-deep); }
+.btn-ghost:focus-visible{ outline:3px solid var(--amber); outline-offset:2px; }
+.btn-start{ width:100%; }
+.btn-start svg, .btn-primary svg{ flex-shrink:0; }
+
+.form-nav{
+  position:sticky; bottom:0; z-index:2;
+  display:flex; gap:10px; margin-top:18px; padding:14px 0 4px;
+  background:linear-gradient(180deg, rgba(242,250,248,0) 0%, var(--mint-bg) 30%);
+}
+.form-nav .btn{ flex:1; }
+#prevBtn{ flex:0 0 auto; }
+
+.site-footer{
+  text-align:center; margin-top:26px; font-size:11.5px; color:var(--ink-soft); opacity:0.8;
+  line-height:1.5;
+}
+
+/* =====================================================================
+   RESPONSIVE
+   ===================================================================== */
+@media (max-width:420px){
+  .brand-text h1{ font-size:19px; }
+  .card{ padding:20px 16px 22px; }
+  h2{ font-size:19px; }
+  .rating-scale span{ height:34px; font-size:12.5px; }
+  .nps-row span{ height:40px; font-size:13.5px; }
+}
+
+@media (min-width:640px){
+  .page{ padding-top:36px; }
+  .card{ padding:34px 36px 36px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     ARRIÈRE-PLAN DÉCORATIF (pilules flottantes, purement visuel)
+     ============================================================ -->
+<div class="bg-decor" aria-hidden="true">
+  <span class="capsule c1"></span>
+  <span class="capsule c2"></span>
+  <span class="capsule c3"></span>
+  <span class="cross c4"></span>
+</div>
+
+<div class="page">
+
+  <!-- ============================================================
+       EN-TÊTE : logo + nom de la pharmacie
+       ============================================================ -->
+  <header class="site-header">
+    <div class="brand">
+      <!-- Emplacement du logo : remplacez ce SVG par <img src="logo.png"> si vous avez un logo -->
+      <div class="brand-mark" id="logoSlot">
+        <svg viewBox="0 0 48 48" width="30" height="30" aria-hidden="true">
+          <path d="M14 34 L34 14" stroke="white" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="16.5" cy="31.5" r="9" fill="none" stroke="white" stroke-width="4.5"/>
+          <circle cx="31.5" cy="16.5" r="9" fill="none" stroke="white" stroke-width="4.5"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <p class="brand-eyebrow">Pharmacie</p>
+        <h1>Resurrection <span>· Taabo</span></h1>
+      </div>
+    </div>
+    <p class="brand-claim">Votre avis, notre ordonnance</p>
+  </header>
+
+  <!-- ============================================================
+       BARRE DE PROGRESSION (forme "gélule" segmentée)
+       ============================================================ -->
+  <div class="progress-wrap" id="progressWrap" aria-hidden="false">
+    <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progressBar" aria-valuenow="0">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <p class="progress-label"><span id="stepNow">1</span> / <span id="stepTotal">8</span> — <span id="stepName">Bienvenue</span></p>
+  </div>
+
+  <!-- ============================================================
+       FORMULAIRE PRINCIPAL
+       ============================================================ -->
+  <main>
+    <form id="surveyForm" novalidate>
+
+      <!-- ---------- ÉTAPE 0 : ACCUEIL ---------- -->
+      <section class="step" data-step="0" data-name="Bienvenue">
+        <div class="card intro-card">
+          <p class="eyebrow">Enquête de satisfaction</p>
+          <h2>Aidez-nous à mieux vous servir</h2>
+          <p class="intro-text">
+            Cette enquête est <strong>anonyme</strong> et prend <strong>moins de 5 minutes</strong>.
+            Vos réponses nous permettront d'améliorer concrètement l'accueil, les délais
+            et les services de la Pharmacie Resurrection.
+          </p>
+          <ul class="intro-points">
+            <li><span class="dot dot-blue"></span> 100% anonyme</li>
+            <li><span class="dot dot-green"></span> 3 à 5 minutes</li>
+            <li><span class="dot dot-blue"></span> Vos réponses comptent vraiment</li>
+          </ul>
+          <button type="button" class="btn btn-primary btn-start" id="startBtn">
+            Commencer l'enquête
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- ---------- ÉTAPE 1 : PROFIL ---------- -->
+      <section class="step" data-step="1" data-name="Votre profil">
+        <div class="card">
+          <p class="eyebrow">Section 1</p>
+          <h2>Un peu plus sur vous</h2>
+
+          <fieldset class="field-group" data-required="true">
+            <legend>Vous êtes</legend>
+            <div class="chip-options" data-name="sexe">
+              <label class="chip"><input type="radio" name="sexe" value="Homme"><span>Homme</span></label>
+              <label class="chip"><input type="radio" name="sexe" value="Femme"><span>Femme</span></label>
+              <label class="chip"><input type="radio" name="sexe" value="Préfère ne pas répondre"><span>Préfère ne pas répondre</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group" data-required="true">
+            <legend>Votre tranche d'âge</legend>
+            <div class="chip-options" data-name="age">
+              <label class="chip"><input type="radio" name="age" value="Moins de 18 ans"><span>Moins de 18 ans</span></label>
+              <label class="chip"><input type="radio" name="age" value="18–25 ans"><span>18–25 ans</span></label>
+              <label class="chip"><input type="radio" name="age" value="26–35 ans"><span>26–35 ans</span></label>
+              <label class="chip"><input type="radio" name="age" value="36–45 ans"><span>36–45 ans</span></label>
+              <label class="chip"><input type="radio" name="age" value="46–60 ans"><span>46–60 ans</span></label>
+              <label class="chip"><input type="radio" name="age" value="Plus de 60 ans"><span>Plus de 60 ans</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group" data-required="true">
+            <legend>Fréquence de visite</legend>
+            <div class="chip-options" data-name="frequence">
+              <label class="chip"><input type="radio" name="frequence" value="Première visite"><span>Première visite</span></label>
+              <label class="chip"><input type="radio" name="frequence" value="Occasionnellement"><span>Occasionnellement</span></label>
+              <label class="chip"><input type="radio" name="frequence" value="Une fois par mois"><span>Une fois par mois</span></label>
+              <label class="chip"><input type="radio" name="frequence" value="Plusieurs fois par mois"><span>Plusieurs fois par mois</span></label>
+              <label class="chip"><input type="radio" name="frequence" value="Chaque semaine"><span>Chaque semaine</span></label>
+            </div>
+          </fieldset>
+          <p class="error-msg" id="err-1">Merci de répondre à toutes les questions de cette section.</p>
+        </div>
+      </section>
+
+      <!-- ---------- ÉTAPE 2 : SATISFACTION PRESTATIONS ---------- -->
+      <section class="step" data-step="2" data-name="Vos prestations">
+        <div class="card">
+          <p class="eyebrow">Section 2</p>
+          <h2>Votre satisfaction sur nos prestations</h2>
+          <p class="hint">Pour chaque critère, choisissez une note de 1 (très insatisfait) à 5 (très satisfait).</p>
+
+          <div class="scale-legend">
+            <span>1 Très insatisfait</span><span>3 Moyen</span><span>5 Très satisfait</span>
+          </div>
+
+          <div class="rating-list" id="ratingList" data-required="true">
+            <!-- généré dynamiquement par script.js -->
+          </div>
+          <p class="error-msg" id="err-2">Merci d'évaluer chaque critère.</p>
+        </div>
+      </section>
+
+      <!-- ---------- ÉTAPE 3 : QCM ---------- -->
+      <section class="step" data-step="3" data-name="Disponibilité">
+        <div class="card">
+          <p class="eyebrow">Section 3</p>
+          <h2>Disponibilité &amp; recommandation</h2>
+
+          <fieldset class="field-group" data-required="true">
+            <legend>Les médicaments recherchés sont-ils généralement disponibles ?</legend>
+            <div class="chip-options" data-name="disponibilite">
+              <label class="chip"><input type="radio" name="disponibilite" value="Toujours"><span>Toujours</span></label>
+              <label class="chip"><input type="radio" name="disponibilite" value="Souvent"><span>Souvent</span></label>
+              <label class="chip"><input type="radio" name="disponibilite" value="Parfois"><span>Parfois</span></label>
+              <label class="chip"><input type="radio" name="disponibilite" value="Rarement"><span>Rarement</span></label>
+              <label class="chip"><input type="radio" name="disponibilite" value="Jamais"><span>Jamais</span></label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field-group" data-required="true">
+            <legend>Recommanderiez-vous la Pharmacie Resurrection à un proche ?</legend>
+            <div class="chip-options" data-name="recommandation">
+              <label class="chip"><input type="radio" name="recommandation" value="Oui certainement"><span>Oui certainement</span></label>
+              <label class="chip"><input type="radio" name="recommandation" value="Oui probablement"><span>Oui probablement</span></label>
+              <label class="chip"><input type="radio" name="recommandation" value="Peut-être"><span>Peut-être</span></label>
+              <label class="chip"><input type="radio" name="recommandation" value="Probablement pas"><span>Probablement pas</span></label>
+              <label class="chip"><input type="radio" name="recommandation" value="Non"><span>Non</span></label>
+            </div>
+          </fieldset>
+          <p class="error-msg" id="err-3">Merci de répondre aux deux questions.</p>
+        </div>
+      </section>
+
+      <!-- ---------- ÉTAPE 4 : AMÉLIORATIONS ---------- -->
+      <section class="step" data-step="4" data-name="Améliorations">
+        <div class="card">
+          <p class="eyebrow">Section 4</p>
+          <h2>Quels services souhaiteriez-vous voir améliorés ?</h2>
+          <p class="hint">Plusieurs réponses possibles.</p>
+
+          <div class="check-grid" id="improveGrid" data-required="true">
+            <!-- généré dynamiquement par script.js -->
+          </div>
+          <input type="text" id="autreText" class="text-input hidden" placeholder="Précisez votre suggestion…">
+          <p class="error-msg" id="err-4">Merci de choisir au moins une option.</p>
+        </div>
+      </section>
+
+      <!-- ---------- ÉTAPE 5 : QUESTIONS OUVERTES ---------- -->
+      <section class="step" data-step="5" data-name="Vos mots">
+        <div class="card">
+          <p class="eyebrow">Section 5</p>
+          <h2>En quelques mots</h2>
+
+          <label class="field-label" for="pointFort">Quel est selon vous le principal point fort de la pharmacie ?</label>
+          <textarea id="pointFort" name="pointFort" rows="3" class="text-area" placeholder="Votre réponse…"></textarea>
+
+          <label class="field-label" for="aAmeliorer">Que devrions-nous améliorer en priorité ?</label>
+          <textarea id="aAmeliorer" name="aAmeliorer" rows="3" class="text-area" placeholder="Votre réponse…"></textarea>
+
+          <label class="field-label" for="suggestion">Avez-vous une suggestion particulière ?</label>
+          <textarea id="suggestion" name="suggestion" rows="3" class="text-area" placeholder="Votre réponse… (facultatif)"></textarea>
+        </div>
+      </section>
+
+      <!-- ---------- ÉTAPE 6 : NOTE GLOBALE ---------- -->
+      <section class="step" data-step="6" data-name="Note globale">
+        <div class="card">
+          <p class="eyebrow">Section 6</p>
+          <h2>Votre satisfaction globale</h2>
+          <p class="hint">Sur une échelle de 1 à 10, quelle note donneriez-vous à la Pharmacie Resurrection ?</p>
+
+          <div class="nps-row" id="npsRow" data-required="true">
+            <!-- généré dynamiquement par script.js -->
+          </div>
+          <div class="nps-scale-labels">
+            <span>1 — Pas du tout satisfait</span>
+            <span>10 — Extrêmement satisfait</span>
+          </div>
+          <p class="error-msg" id="err-6">Merci de choisir une note.</p>
+        </div>
+      </section>
+
+      <!-- ---------- ÉTAPE 7 : REMERCIEMENTS ---------- -->
+      <section class="step" data-step="7" data-name="Merci !">
+        <div class="card intro-card thanks-card" id="thanksCard">
+          <div class="thanks-icon">
+            <svg width="46" height="46" viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5L20 7" stroke="white" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h2>Merci infiniment !</h2>
+          <p class="intro-text">
+            Votre avis a bien été enregistré. Il sera examiné avec attention par toute l'équipe
+            de la Pharmacie Resurrection pour améliorer votre expérience à chaque visite.
+          </p>
+          <p class="intro-text small">Prenez soin de vous 💙💚</p>
+        </div>
+      </section>
+
+    </form>
+  </main>
+
+  <!-- ============================================================
+       NAVIGATION (précédent / suivant / envoyer)
+       ============================================================ -->
+  <nav class="form-nav" id="formNav">
+    <button type="button" class="btn btn-ghost" id="prevBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M11 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Précédent
+    </button>
+    <button type="button" class="btn btn-primary" id="nextBtn">
+      Suivant
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="btn btn-primary btn-submit hidden" id="submitBtn">
+      Envoyer mes réponses
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5L20 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </nav>
+
+  <footer class="site-footer">
+    <p>Pharmacie Resurrection — Taabo, Côte d'Ivoire · Enquête réalisée dans le cadre de l'amélioration continue de nos services.</p>
+  </footer>
+
+</div>
+
+<script>
+/* =====================================================================
+   PHARMACIE RESURRECTION — LOGIQUE DU FORMULAIRE
+   Ce fichier gère :
+   1) la génération des questions répétitives (échelle 1-5, cases à
+      cocher, note 1-10) pour éviter de dupliquer du HTML ;
+   2) la navigation entre les étapes + la barre de progression ;
+   3) la validation des champs obligatoires ;
+   4) l'enregistrement final des réponses (téléchargement JSON local
+      + un point d'entrée prêt à connecter à Google Sheets / Firebase).
+
+   Débutant bienvenu : chaque bloc est commenté. Vous pouvez modifier
+   les tableaux "CRITERES_SATISFACTION", "OPTIONS_AMELIORATION", etc.
+   pour changer les questions sans toucher au reste du code.
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. DONNÉES DES QUESTIONS RÉPÉTITIVES
+   --------------------------------------------------------------------- */
+
+// Critères notés de 1 (très insatisfait) à 5 (très satisfait)
+const CRITERES_SATISFACTION = [
+  { id: "accueil",        label: "Qualité de l'accueil" },
+  { id: "politesse",      label: "Politesse du personnel" },
+  { id: "attente",        label: "Temps d'attente" },
+  { id: "disponibilite",  label: "Disponibilité des médicaments" },
+  { id: "conseils",       label: "Conseils pharmaceutiques" },
+  { id: "confidentialite",label: "Confidentialité" },
+  { id: "proprete",       label: "Propreté de la pharmacie" },
+  { id: "organisation",   label: "Organisation" },
+  { id: "prix",           label: "Prix pratiqués" },
+  { id: "horaires",       label: "Horaires d'ouverture" },
+  { id: "rapidite",       label: "Rapidité du service" }
+];
+
+// Services que le client peut souhaiter voir améliorés (choix multiple)
+const OPTIONS_AMELIORATION = [
+  "Réduction du temps d'attente",
+  "Plus de médicaments disponibles",
+  "Plus de produits de parapharmacie",
+  "Plus de promotions",
+  "Programme de fidélité",
+  "Livraison à domicile",
+  "Paiement mobile facilité",
+  "Plus de conseils personnalisés",
+  "Vaccination",
+  "Dépistage (glycémie, tension…)",
+  "Téléconsultation",
+  "Horaires élargis",
+  "Service WhatsApp",
+  "Commande en ligne",
+  "Autre"
+];
+
+/* ---------------------------------------------------------------------
+   2. GÉNÉRATION DU HTML DES QUESTIONS RÉPÉTITIVES
+   --------------------------------------------------------------------- */
+
+function buildRatingList() {
+  const container = document.getElementById("ratingList");
+  container.innerHTML = CRITERES_SATISFACTION.map((critere) => `
+    <div class="rating-item">
+      <p>${critere.label}</p>
+      <div class="rating-scale">
+        ${[1, 2, 3, 4, 5].map((n) => `
+          <label>
+            <input type="radio" name="note_${critere.id}" value="${n}" required>
+            <span>${n}</span>
+          </label>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+
+function buildImprovementGrid() {
+  const container = document.getElementById("improveGrid");
+  container.innerHTML = OPTIONS_AMELIORATION.map((label, i) => `
+    <label class="check-item">
+      <input type="checkbox" name="amelioration" value="${label}" data-index="${i}">
+      <span class="row">
+        <span class="box">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+            <path d="M4 12.5l5 5L20 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span class="label-text">${label}</span>
+      </span>
+    </label>
+  `).join("");
+
+  // Afficher le champ texte libre quand "Autre" est coché
+  const autreCheckbox = container.querySelector('input[value="Autre"]');
+  const autreInput = document.getElementById("autreText");
+  autreCheckbox.addEventListener("change", () => {
+    autreInput.classList.toggle("hidden", !autreCheckbox.checked);
+    if (!autreCheckbox.checked) autreInput.value = "";
+  });
+}
+
+function buildNpsRow() {
+  const container = document.getElementById("npsRow");
+  let html = "";
+  for (let n = 1; n <= 10; n++) {
+    html += `
+      <label>
+        <input type="radio" name="noteGlobale" value="${n}" required>
+        <span>${n}</span>
+      </label>
+    `;
+  }
+  container.innerHTML = html;
+}
+
+/* ---------------------------------------------------------------------
+   3. NAVIGATION ENTRE LES ÉTAPES
+   --------------------------------------------------------------------- */
+
+const steps = Array.from(document.querySelectorAll(".step"));
+const totalSteps = steps.length;
+let currentStep = 0;
+
+const progressFill = document.getElementById("progressFill");
+const progressBar = document.getElementById("progressBar");
+const stepNowEl = document.getElementById("stepNow");
+const stepTotalEl = document.getElementById("stepTotal");
+const stepNameEl = document.getElementById("stepName");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
+const submitBtn = document.getElementById("submitBtn");
+const startBtn = document.getElementById("startBtn");
+const formNav = document.getElementById("formNav");
+const progressWrap = document.getElementById("progressWrap");
+
+stepTotalEl.textContent = totalSteps;
+
+function showStep(index) {
+  steps.forEach((s, i) => s.classList.toggle("active", i === index));
+
+  // Progression (l'étape "Merci" compte comme 100%)
+  const percent = Math.round((index / (totalSteps - 1)) * 100);
+  progressFill.style.width = percent + "%";
+  progressBar.setAttribute("aria-valuenow", percent);
+  stepNowEl.textContent = index + 1;
+  stepNameEl.textContent = steps[index].dataset.name;
+
+  // Boutons de navigation
+  prevBtn.classList.toggle("hidden", index === 0 || index === totalSteps - 1);
+  nextBtn.classList.toggle("hidden", index === 0 || index === totalSteps - 2 || index === totalSteps - 1);
+  submitBtn.classList.toggle("hidden", index !== totalSteps - 2);
+
+  // Sur l'écran d'accueil et de remerciement, on masque la nav standard
+  const isBookend = index === 0 || index === totalSteps - 1;
+  formNav.classList.toggle("hidden", isBookend);
+  progressWrap.classList.toggle("hidden", index === 0);
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function goToStep(newIndex) {
+  currentStep = Math.max(0, Math.min(totalSteps - 1, newIndex));
+  showStep(currentStep);
+}
+
+/* ---------------------------------------------------------------------
+   4. VALIDATION DES CHAMPS OBLIGATOIRES PAR ÉTAPE
+   --------------------------------------------------------------------- */
+
+function validateStep(index) {
+  const section = steps[index];
+  const errorEl = document.getElementById("err-" + index);
+
+  // Toutes les questions à choix unique (radio) obligatoires de l'étape
+  const radioGroups = new Set(
+    Array.from(section.querySelectorAll("input[type='radio']")).map((r) => r.name)
+  );
+  for (const name of radioGroups) {
+    const checked = section.querySelector(`input[name="${name}"]:checked`);
+    if (!checked) {
+      if (errorEl) errorEl.classList.add("show");
+      return false;
+    }
+  }
+
+  // Cases à cocher : au moins une réponse requise si le groupe existe
+  const checkGrid = section.querySelector("#improveGrid");
+  if (checkGrid) {
+    const anyChecked = checkGrid.querySelector("input[type='checkbox']:checked");
+    if (!anyChecked) {
+      if (errorEl) errorEl.classList.add("show");
+      return false;
+    }
+  }
+
+  if (errorEl) errorEl.classList.remove("show");
+  return true;
+}
+
+/* ---------------------------------------------------------------------
+   5. ÉVÉNEMENTS DE NAVIGATION
+   --------------------------------------------------------------------- */
+
+startBtn.addEventListener("click", () => goToStep(currentStep + 1));
+
+nextBtn.addEventListener("click", () => {
+  if (validateStep(currentStep)) {
+    goToStep(currentStep + 1);
+  }
+});
+
+prevBtn.addEventListener("click", () => goToStep(currentStep - 1));
+
+submitBtn.addEventListener("click", () => {
+  if (validateStep(currentStep)) {
+    handleSubmit();
+  }
+});
+
+/* ---------------------------------------------------------------------
+   6. COLLECTE ET ENREGISTREMENT DES RÉPONSES
+   --------------------------------------------------------------------- */
+
+function collectAnswers() {
+  const form = document.getElementById("surveyForm");
+  const data = new FormData(form);
+
+  const answers = {
+    date: new Date().toISOString(),
+    pharmacie: "Resurrection - Taabo",
+    profil: {
+      sexe: data.get("sexe") || "",
+      age: data.get("age") || "",
+      frequence: data.get("frequence") || ""
+    },
+    satisfactionPrestations: {},
+    disponibilite: data.get("disponibilite") || "",
+    recommandation: data.get("recommandation") || "",
+    ameliorationsSouhaitees: data.getAll("amelioration"),
+    autrePrecision: document.getElementById("autreText").value.trim(),
+    questionsOuvertes: {
+      pointFort: document.getElementById("pointFort").value.trim(),
+      aAmeliorer: document.getElementById("aAmeliorer").value.trim(),
+      suggestion: document.getElementById("suggestion").value.trim()
+    },
+    noteGlobaleSur10: data.get("noteGlobale") || ""
+  };
+
+  CRITERES_SATISFACTION.forEach((c) => {
+    answers.satisfactionPrestations[c.label] = data.get("note_" + c.id) || "";
+  });
+
+  return answers;
+}
+
+// Déclenche le téléchargement d'un fichier JSON contenant la réponse.
+// Utile pour un usage local / hors-ligne, ou pour archiver manuellement.
+function downloadAsJson(answers) {
+  const blob = new Blob([JSON.stringify(answers, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const stamp = answers.date.replace(/[:.]/g, "-");
+  a.href = url;
+  a.download = `resurrection-reponse-${stamp}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+/* ---------------------------------------------------------------------
+   OPTIONNEL — Connexion à Google Sheets / Google Forms / Firebase
+   ---------------------------------------------------------------------
+   Pour centraliser les réponses de tous vos clients (au lieu d'un
+   fichier JSON par personne), reliez ce formulaire à un service en
+   ligne. Deux options simples, sans backend à héberger :
+
+   A) GOOGLE SHEETS (via Google Apps Script) :
+      1. Créez un Google Sheet, ouvrez "Extensions > Apps Script".
+      2. Collez un script qui reçoit un POST JSON et l'ajoute en ligne
+         (doPost(e) { ... SpreadsheetApp ... }), puis "Déployer" en
+         tant qu'application web accessible à "Tout le monde".
+      3. Copiez l'URL de déploiement ci-dessous, dans GOOGLE_SHEET_URL.
+      4. Décommentez l'appel fetch dans sendToGoogleSheet().
+
+   B) FIREBASE (Firestore) :
+      1. Créez un projet Firebase + une base Firestore.
+      2. Ajoutez le SDK Firebase (via script CDN) dans index.html.
+      3. Remplacez le contenu de sendToGoogleSheet() par un
+         addDoc(collection(db, "reponses_resurrection"), answers).
+
+   Par défaut (sans configuration), le formulaire fonctionne quand
+   même : les réponses sont simplement proposées en téléchargement.
+   --------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------
+   NOTIFICATION PAR E-MAIL — Formspree
+   ---------------------------------------------------------------------
+   Chaque réponse envoyée déclenche un e-mail à stephaneguede7@gmail.com.
+
+   IMPORTANT (une seule fois) : lors de la toute première soumission du
+   formulaire en ligne, Formspree envoie un e-mail de confirmation à
+   cette adresse avec un lien "Confirm your email" / "Verify". Il faut
+   cliquer sur ce lien pour activer l'envoi des notifications suivantes.
+   --------------------------------------------------------------------- */
+const FORMSPREE_URL = "https://formspree.io/stephaneguede7@gmail.com";
+
+async function sendToFormspree(answers) {
+  if (!FORMSPREE_URL) return;
+  try {
+    await fetch(FORMSPREE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(answers)
+    });
+  } catch (err) {
+    console.warn("Envoi Formspree impossible :", err);
+  }
+}
+
+const GOOGLE_SHEET_URL = ""; // ex: "https://script.google.com/macros/s/XXXXX/exec"
+
+async function sendToGoogleSheet(answers) {
+  if (!GOOGLE_SHEET_URL) return; // non configuré : on ne fait rien
+  try {
+    await fetch(GOOGLE_SHEET_URL, {
+      method: "POST",
+      mode: "no-cors", // Apps Script ne renvoie pas d'en-têtes CORS par défaut
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(answers)
+    });
+  } catch (err) {
+    console.warn("Envoi vers Google Sheet impossible :", err);
+  }
+}
+
+function handleSubmit() {
+  const answers = collectAnswers();
+
+  console.log("Réponse enregistrée :", answers);
+  downloadAsJson(answers);
+  sendToFormspree(answers);
+  sendToGoogleSheet(answers);
+
+  goToStep(totalSteps - 1); // écran de remerciement
+}
+
+/* ---------------------------------------------------------------------
+   7. INITIALISATION
+   --------------------------------------------------------------------- */
+
+buildRatingList();
+buildImprovementGrid();
+buildNpsRow();
+showStep(0);
+
+</script>
+</body>
+</html>
